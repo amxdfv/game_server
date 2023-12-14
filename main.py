@@ -1,5 +1,6 @@
 import json
 from fastapi import FastAPI, WebSocket
+from logic import database_logic, response_logic
 
 app = FastAPI()
 
@@ -15,11 +16,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
 async def processing_message(msg):
     try:
-        response = {"output": json.loads(msg)["input"]}
+        method_name = json.loads(msg)["command"].lower()
+        response = getattr(database_logic, method_name)(msg)
         return str(response)
     except KeyError:
-        response = {"output": {"error": "В сообщении отсутствует поле input"}}
+        response = response_logic.construct_response(json.loads(msg)["command"], "ERROR", "В сообщении отсутствует необходимое поле")
         return str(response)
     except Exception as error:
-        response = {"output": {"error": error}}
+        response = response_logic.construct_response(json.loads(msg)["command"], "ERROR", str(error))
         return str(response)
