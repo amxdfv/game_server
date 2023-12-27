@@ -24,9 +24,9 @@ def get_user(msg):
         rows = cursor.fetchall()
 
         if cursor.rowcount > 2:
-            return response_logic.construct_response("GET_USER", "ERROR", "Нашлось больше двух пользователей")
+            return response_logic.construct_response("GET_USER", "ERROR", "Found more than one user")
         elif cursor.rowcount < 1:
-            return response_logic.construct_response("GET_USER", "ERROR", "Пользователь не найден")
+            return response_logic.construct_response("GET_USER", "ERROR", "User not found")
 
         for row in rows:
             data = {"login": row[0], "password": row[1], "name": row[2],
