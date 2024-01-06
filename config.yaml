@@ -3,3 +3,5 @@ sql_user: 1
 sql_password: 1
 sql_database: 1
 
+connection_lifetime: 7200 # время в секундах
+
